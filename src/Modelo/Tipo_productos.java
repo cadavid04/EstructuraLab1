@@ -13,9 +13,40 @@ import java.util.List;
  */
 public class Tipo_productos {
     
-    String referencia_tipo;
-    String nombre;
-    
+    private String referencia_tipo;
+    private String nombre;
+
+    public Tipo_productos(String referencia_tipo, String nombre) {
+        this.referencia_tipo = referencia_tipo;
+        this.nombre = nombre;
+    }
+
     private List <Productos> productos;
     
+    public Tipo_productos() {
+    }
+
+    public String getReferencia_tipo() {
+        return referencia_tipo;
+    }
+
+    public void setReferencia_tipo(String referencia_tipo) {
+        this.referencia_tipo = referencia_tipo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public List <Productos> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List <Productos> productos) {
+        this.productos = productos;
+    }
 }

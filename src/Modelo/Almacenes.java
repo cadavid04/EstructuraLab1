@@ -7,7 +7,7 @@ package Modelo;
 
 import java.util.List;
 
-/**
+/*
  *
  * @author carloscarrascal
  */
@@ -19,4 +19,5 @@ public class Almacenes {
      String horario;
      
      private List <Inventario> Inventario;
+     
 }
