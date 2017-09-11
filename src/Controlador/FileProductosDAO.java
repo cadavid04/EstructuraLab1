@@ -91,7 +91,7 @@ public class FileProductosDAO implements ProductosDAO {
 		        CharBuffer registro= Charset.forName(encoding).decode(buf);
 		        String identificacion = registro.subSequence(0, ID_PRODUCTO_LONGITUD).toString().trim();
 		        if(identificacion.equals(id_producto)){
-		        	producto = parseCliente(registro);
+		        	producto = parseProducto(registro);
 		        	CACHE_PRODUCTOS.put(id_producto, producto);
 		        	return producto;
 		        }
@@ -129,7 +129,7 @@ public class FileProductosDAO implements ProductosDAO {
 
 
 	
-	private Productos parseCliente(CharBuffer registro){		
+	private Productos parseProducto(CharBuffer registro){		
 		String id_producto = registro.subSequence(0, ID_PRODUCTO_LONGITUD ).toString();
 		registro.position(ID_PRODUCTO_LONGITUD);
 		registro=registro.slice();
@@ -146,30 +146,26 @@ public class FileProductosDAO implements ProductosDAO {
 		registro.position(DESC_COLECCION);	
 		registro=registro.slice();
                 
-                String precio = registro.subSequence(0, PRECIO).toString();
-		registro.position(PRECIO);	
+                int precio = Integer.parseInt(registro.subSequence(0,PRECIO).toString());	
 		registro=registro.slice();
               
 		String image = registro.subSequence(0, IMAGE).toString();
 		registro.position(IMAGE);	
 		registro=registro.slice();
                
-		Productos c = new Productos(id_producto, precio, desc_coleccion, precio, image);
-		
-                
+		Productos c = new Productos(id_producto, image ,precio, desc_coleccion, referencia_tipo);
+		 
                 return c;
 	}
 	
 	private String parseClienteString(Productos producto){
 		StringBuilder registro = new StringBuilder(LONGITUD_REGISTRO);
-		registro.append(completarCampoConEspacios(producto.getId_producto(),ID_PRODUCTO_LONGITUD));
-		registro.append(completarCampoConEspacios(producto.getNombres(), NOMBRES_LONGITUD));
-                registro.append(completarCampoConEspacios(producto.getApellidos(), NOMBRES_LONGITUD));
-                registro.append(completarCampoConEspacios(producto.getCorreo_e(), NOMBRES_LONGITUD));
-                registro.append(completarCampoConEspacios(producto.getCelular(), NOMBRES_LONGITUD));
-                registro.append(completarCampoConEspacios(producto.getDireccion(), NOMBRES_LONGITUD));
-                registro.append(completarCampoConEspacios(producto.getFecha_nacimiento(), NOMBRES_LONGITUD));
-			
+		registro.append(completarCampoConEspacios(producto.getId_productos(),ID_PRODUCTO_LONGITUD));
+		registro.append(completarCampoConEspacios(producto.getDesc_coleccion(),DESC_COLECCION));
+                registro.append(completarCampoConEspacios(producto.getReferencia_tipo(), REFERENCIA_TIPO));
+                registro.append(completarCampoConEspacios(producto.getImagen(), IMAGE));
+                registro.append(completarCampoConEspacios(Integer.toString(producto.getPrecio()), IMAGE));
+                
 		return registro.toString();
 	}
 	
@@ -186,22 +182,6 @@ public class FileProductosDAO implements ProductosDAO {
 		}
 		return String.format("%1$-" + tamanio + "s", campo);
 	}
-
-    @Override
-    public Productos getProductos(String id_producto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean saveProductos(Productos producto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<Productos> getAllProductos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 
 }
 /**

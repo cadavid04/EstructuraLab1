@@ -13,27 +13,29 @@ import java.util.List;
  */
 public class Productos {
     
-   private int id_productos;
+   private String id_productos;
    private String imagen;
    private int precio;
-   private Colecciones desc_coleccion;
-   private Tipo_productos referencia_tipo;
+   private String desc_coleccion;
+   private String referencia_tipo;
+
+    public Productos(String id_productos, String imagen, int precio, String desc_coleccion, String referencia_tipo) {
+        this.id_productos = id_productos;
+        this.imagen = imagen;
+        this.precio = precio;
+        this.desc_coleccion = desc_coleccion;
+        this.referencia_tipo = referencia_tipo;
+    }
    
    
    private List <Detalle_ventas> detalle_ventas;
    private List <Inventario> Inventario;
 
-    public Productos(int id_productos, int precio,  referencia_tipo) {
-        this.id_productos = id_productos;
-        this.precio = precio;
-        this.referencia_tipo = referencia_tipo;
-    }
-
-    public int getId_productos() {
+    public String getId_productos() {
         return id_productos;
     }
 
-    public void setId_productos(int id_productos) {
+    public void setId_productos(String id_productos) {
         this.id_productos = id_productos;
     }
 
@@ -53,38 +55,39 @@ public class Productos {
         this.precio = precio;
     }
 
-    public Colecciones getDesc_coleccion() {
+    public String getDesc_coleccion() {
         return desc_coleccion;
     }
 
-    public void setDesc_coleccion(Colecciones desc_coleccion) {
+    public void setDesc_coleccion(String desc_coleccion) {
         this.desc_coleccion = desc_coleccion;
     }
 
-    public Tipo_productos getReferencia_tipo() {
+    public String getReferencia_tipo() {
         return referencia_tipo;
     }
 
-    public void setReferencia_tipo(Tipo_productos referencia_tipo) {
+    public void setReferencia_tipo(String referencia_tipo) {
         this.referencia_tipo = referencia_tipo;
     }
 
-    public List <Detalle_ventas> getDetalle_ventas() {
+    public List<Detalle_ventas> getDetalle_ventas() {
         return detalle_ventas;
     }
 
-    public void setDetalle_ventas(List <Detalle_ventas> detalle_ventas) {
+    public void setDetalle_ventas(List<Detalle_ventas> detalle_ventas) {
         this.detalle_ventas = detalle_ventas;
     }
 
-    public List <Inventario> getInventario() {
+    public List<Inventario> getInventario() {
         return Inventario;
     }
 
-    public void setInventario(List <Inventario> Inventario) {
+    public void setInventario(List<Inventario> Inventario) {
         this.Inventario = Inventario;
     }
-   
+
+    
     
     
 }
