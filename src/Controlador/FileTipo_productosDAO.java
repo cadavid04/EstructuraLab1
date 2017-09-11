@@ -103,7 +103,7 @@ public class FileTipo_productosDAO implements Tipo_productosDAO {
 	
 	@Override
 	public List<Tipo_productos> getAllTipo_producto() {	
-		List<Tipo_productos> personas = new ArrayList<Tipo_productos>();
+		List<Tipo_productos> productos= new ArrayList<Tipo_productos>();
 		try (SeekableByteChannel sbc = Files.newByteChannel(file)) {
 		    ByteBuffer buf = ByteBuffer.allocate(LONGITUD_REGISTRO);  
 		    
@@ -113,12 +113,12 @@ public class FileTipo_productosDAO implements Tipo_productosDAO {
 		        buf.rewind();
 		        Tipo_productos persona = parseTipoProductos(Charset.forName(encoding).decode(buf));
 		        buf.flip();
-		        personas.add(persona);		        
+		        productos.add(persona);		        
 		    }
 		} catch (IOException x) {
 		    System.out.println("caught exception: " + x);
 		}
-		return personas;
+		return productos;
 	}
 		
 

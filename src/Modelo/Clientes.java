@@ -13,19 +13,20 @@ import java.util.List;
  */
 public class Clientes {
     
-    private int id_cliente;
+    private String id_cliente;
     private String nombres;
     private String apellidos;
     private String correo_e;
-    private int celular;
+    private String celular;
     private String fecha_nacimiento;
     private String direccion;
+    private String nuevo;
     private List <Ventas> ventas;
 
     public Clientes() {
     }
 
-    public Clientes(int id_cliente, String nombres, String apellidos, String correo_e, int celular, String fecha_nacimiento, String direccion) {
+    public Clientes(String id_cliente, String nombres, String apellidos, String correo_e, String celular, String fecha_nacimiento, String direccion, String nuevo) {
         this.id_cliente = id_cliente;
         this.nombres = nombres;
         this.apellidos = apellidos;
@@ -33,6 +34,7 @@ public class Clientes {
         this.celular = celular;
         this.fecha_nacimiento = fecha_nacimiento;
         this.direccion = direccion;
+        this.nuevo = nuevo;
     }
 
     public String getDireccion() {
@@ -43,11 +45,11 @@ public class Clientes {
         this.direccion = direccion;
     }
 
-    public int getId_cliente() {
+    public String getId_cliente() {
         return id_cliente;
     }
 
-    public void setId_cliente(int id_cliente) {
+    public void setId_cliente(String id_cliente) {
         this.id_cliente = id_cliente;
     }
 
@@ -75,11 +77,11 @@ public class Clientes {
         this.correo_e = correo_e;
     }
 
-    public int getCelular() {
+    public String getCelular() {
         return celular;
     }
 
-    public void setCelular(int celular) {
+    public void setCelular(String celular) {
         this.celular = celular;
     }
 
@@ -91,6 +93,15 @@ public class Clientes {
         this.fecha_nacimiento = fecha_nacimiento;
     }
 
+    public String getNuevo() {
+        return nuevo;
+    }
+
+    public void setNuevo(String nuevo) {
+        this.nuevo = nuevo;
+    }
+
+    
     public List <Ventas> getVentas() {
         return ventas;
     }
