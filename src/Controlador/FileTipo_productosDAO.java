@@ -37,9 +37,9 @@ public class FileTipo_productosDAO implements Tipo_productosDAO {
 	private static final String REGISTRO_ELIMINADO_TEXT = "||||||||||";
 	private static final String NOMBRE_ARCHIVO = "Tipo_productos";
 	private static final Path file= Paths.get(NOMBRE_ARCHIVO);
-	private static final int LONGITUD_REGISTRO = 81;
-	private static final int REFERENCIA_TIPO_LONGITUD = 40;
-	private static final int NOMBRE_LONGITUD = 40;
+	private static final int LONGITUD_REGISTRO = 40;
+	private static final int REFERENCIA_TIPO_LONGITUD = 20;
+	private static final int NOMBRE_LONGITUD = 20;
 	
 	
 	

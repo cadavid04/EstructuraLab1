@@ -28,7 +28,7 @@ public class VistaProductos extends javax.swing.JFrame {
 
        public String getIDProducto (){
              {
-             try{String id_producto = field_id_producto.getName();
+             try{String id_producto = field_id_producto.getText();
                 return id_producto;
              }catch(Exception ex){
            return "Error";
@@ -47,8 +47,8 @@ public class VistaProductos extends javax.swing.JFrame {
         }
          public String getTipoProductos (){
                 {
-                 try{String tipoProductos = field_tipo_productos.getName();
-                    return tipoProductos;
+                 try{String tipoProducto = (String) field_tipo_productos.getSelectedItem();
+                    return tipoProducto;
                 }catch(Exception ex){
                 return "Error";
                                             }
@@ -75,7 +75,6 @@ public class VistaProductos extends javax.swing.JFrame {
          }
          
          public void registrarProductos(){
-      JOptionPane.showMessageDialog(null, this.getTipoProductos());
       p= new Productos(getIDProducto (),getImage (),getPrecio (),getColeccion (),getTipoProductos ());
       pDAO = new FileProductosDAO();
       if (pDAO.saveProductos(p)) {
@@ -155,9 +154,9 @@ public class VistaProductos extends javax.swing.JFrame {
             }
         });
 
-        int i=1;
         field_tipo_productos.setModel(new javax.swing.DefaultComboBoxModel<>(new String [] {""}));
-        for (i=1;i < tipoProductos.size();i++){
+        int i=0;
+        for (i=0;i < tipoProductos.size();i++){
             field_tipo_productos.addItem(tipoProductos.get(i).getReferencia_tipo());
 
         }
@@ -215,7 +214,7 @@ public class VistaProductos extends javax.swing.JFrame {
                     .addComponent(field_precio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
                     .addComponent(field_image, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)

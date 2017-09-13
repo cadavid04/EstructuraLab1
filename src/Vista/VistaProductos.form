@@ -79,7 +79,7 @@
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="field_image" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -164,8 +164,7 @@
       </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JComboBox&lt;&gt;()"/>
-        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="for (i=1;i &lt; tipoProductos.size();i++){&#xa;field_tipo_productos.addItem(tipoProductos.get(i).getReferencia_tipo());&#xa;&#xa;}"/>
-        <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="int i=1;"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="int i=0;&#xa;for (i=0;i &lt; tipoProductos.size();i++){&#xa;field_tipo_productos.addItem(tipoProductos.get(i).getReferencia_tipo());&#xa;&#xa;}"/>
         <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="VistaProductos_jComboBox2"/>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>

@@ -22,13 +22,11 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
 
 import Controlador.ProductosDAO;
 import Modelo.Productos;
@@ -38,13 +36,13 @@ public class FileProductosDAO implements ProductosDAO {
 	private static final String REGISTRO_ELIMINADO_TEXT = "||||||||||";
 	private static final String NOMBRE_ARCHIVO = "Productos";
 	private static final Path file= Paths.get(NOMBRE_ARCHIVO);
-	private static final int LONGITUD_REGISTRO = 251;
-	private static final int ID_PRODUCTO_LONGITUD =40;
-	private static final int NOMBRES_LONGITUD = 40;
-        private static final int REFERENCIA_TIPO = 40;
-        private static final int DESC_COLECCION = 50;
-        private static final int IMAGE = 40;
-        private static final int PRECIO = 40;
+	private static final int LONGITUD_REGISTRO = 120;
+	private static final int ID_PRODUCTO_LONGITUD =20;
+	private static final int NOMBRES_LONGITUD = 20;
+        private static final int REFERENCIA_TIPO = 20;
+        private static final int DESC_COLECCION = 20;
+        private static final int IMAGE = 20;
+        private static final int PRECIO = 20;
      
 	
 	
