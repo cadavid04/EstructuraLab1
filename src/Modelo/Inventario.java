@@ -12,6 +12,12 @@ package Modelo;
 public class Inventario {
     
     private int cantidad;
+
+    public Inventario(int cantidad, Productos id_producto, Almacenes codigo_almacen) {
+        this.cantidad = cantidad;
+        this.id_producto = id_producto;
+        this.codigo_almacen = codigo_almacen;
+    }
     private Productos id_producto;
     private Almacenes codigo_almacen;
 }

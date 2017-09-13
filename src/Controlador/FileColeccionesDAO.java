@@ -12,7 +12,8 @@ package Controlador;
 
 
 import static java.nio.file.StandardOpenOption.APPEND;
-
+import static java.nio.file.StandardOpenOption.READ;
+import static java.nio.file.StandardOpenOption.WRITE;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -23,33 +24,33 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import Modelo.Colecciones;
+import Controlador.ColeccionesDAO;
 
-import Modelo.Tipo_productos;
-import Controlador.Tipo_productosDAO;
-
-public class FileTipo_productosDAO implements Tipo_productosDAO {
+public class FileColeccionesDAO implements ColeccionesDAO {
 
 	private static final String REGISTRO_ELIMINADO_TEXT = "||||||||||";
-	private static final String NOMBRE_ARCHIVO = "Tipo_productos";
+	private static final String NOMBRE_ARCHIVO = "Colecciones";
 	private static final Path file= Paths.get(NOMBRE_ARCHIVO);
-	private static final int LONGITUD_REGISTRO = 81;
-	private static final int REFERENCIA_TIPO_LONGITUD = 40;
-	private static final int NOMBRE_LONGITUD = 40;
-	
-	
-	
-	private static final Map<String, Tipo_productos> CACHE_TIPO_PRODUCTOS = new HashMap<String, Tipo_productos>();
-	
+	private static final int LONGITUD_REGISTRO = 51;
+	private static final int DESC_COLECCION_LONGITUD = 20;
+	private static final int ANO_TRIMESTRE_LONGITUD = 20;
+        private static final int EXCLUSIVIDAD_LONGITUD = 20;
+		
+	private static final Map<String, Colecciones> CACHE_TIPO_COLECCIONES = new HashMap<String, Colecciones>();
 
 	@Override
-	public boolean saveTipo_productos(Tipo_productos t_productos) {
+	public boolean saveColecciones(Colecciones c_colecciones) {
 		
-		String registro=parseTipoProductoString(t_productos);
+		String registro=parseTipoProductoString(c_colecciones);
 
 		byte data[] = registro.getBytes();
 		ByteBuffer out = ByteBuffer.wrap(data);	
@@ -62,11 +63,10 @@ public class FileTipo_productosDAO implements Tipo_productosDAO {
 		return false;
 	}
 	
-	
 	@Override
-	public Tipo_productos getTipo_productos(String ref_tipo) {
+	public Colecciones getColecciones(String ref_tipo) {
 		//se busca el objeto en memoria cach�
-		Tipo_productos tipo_productos = CACHE_TIPO_PRODUCTOS.get(ref_tipo);
+		Colecciones tipo_productos = CACHE_TIPO_COLECCIONES.get(ref_tipo);
 		
 		if(tipo_productos!=null){
 			System.out.println("ocurri� un hit en cach� de personas");//contraejemplo, no hacer, no recomendable, usar Logger como log4J
@@ -81,10 +81,10 @@ public class FileTipo_productosDAO implements Tipo_productosDAO {
 		    while (sbc.read(buf) > 0) {
 		        buf.rewind();
 		        CharBuffer registro= Charset.forName(encoding).decode(buf);
-		        String identificacion = registro.subSequence(0, REFERENCIA_TIPO_LONGITUD).toString().trim();
+		        String identificacion = registro.subSequence(0, DESC_COLECCION_LONGITUD).toString().trim();
 		        if(identificacion.equals(ref_tipo)){
 		        	tipo_productos = parseTipoProductos(registro);
-		        	CACHE_TIPO_PRODUCTOS.put(ref_tipo, tipo_productos);
+		        	CACHE_TIPO_COLECCIONES.put(ref_tipo, tipo_productos);
 		        	return tipo_productos;
 		        }
 		        buf.flip();		        		        
@@ -95,12 +95,9 @@ public class FileTipo_productosDAO implements Tipo_productosDAO {
 		return null;		
 	}
 
-	
-
-	
 	@Override
-	public List<Tipo_productos> getAllTipo_producto() {	
-		List<Tipo_productos> productos= new ArrayList<Tipo_productos>();
+	public List<Colecciones> getAllColecciones() {	
+		List<Colecciones> productos= new ArrayList<Colecciones>();
 		try (SeekableByteChannel sbc = Files.newByteChannel(file)) {
 		    ByteBuffer buf = ByteBuffer.allocate(LONGITUD_REGISTRO);  
 		    
@@ -108,38 +105,40 @@ public class FileTipo_productosDAO implements Tipo_productosDAO {
 		    String encoding = System.getProperty("file.encoding");
 		    while (sbc.read(buf) > 0) {
 		        buf.rewind();
-		        Tipo_productos producto = parseTipoProductos(Charset.forName(encoding).decode(buf));
+		        Colecciones persona = parseTipoProductos(Charset.forName(encoding).decode(buf));
 		        buf.flip();
-		        productos.add(producto);		        
+		        productos.add(persona);		        
 		    }
 		} catch (IOException x) {
 		    System.out.println("caught exception: " + x);
 		}
 		return productos;
 	}
-		
 
-
-	
-	private Tipo_productos parseTipoProductos(CharBuffer registro){		
-		String ref_tipo = registro.subSequence(0, REFERENCIA_TIPO_LONGITUD ).toString();
-		registro.position(REFERENCIA_TIPO_LONGITUD);
+	private Colecciones parseTipoProductos(CharBuffer registro){		
+		String desc_coleccion = registro.subSequence(0, DESC_COLECCION_LONGITUD ).toString();
+		registro.position(DESC_COLECCION_LONGITUD);
 		registro=registro.slice();
 				
-		String nombre = registro.subSequence(0, NOMBRE_LONGITUD).toString();
-		registro.position(NOMBRE_LONGITUD);	
-		registro=registro.slice();		
+		String trimestre = registro.subSequence(0, ANO_TRIMESTRE_LONGITUD).toString();
+		registro.position(ANO_TRIMESTRE_LONGITUD);	
+		registro=registro.slice();
+                
+                String exclusividad = registro.subSequence(0, EXCLUSIVIDAD_LONGITUD).toString();
+		registro.position(EXCLUSIVIDAD_LONGITUD);	
+		registro=registro.slice();
 		
 				
 		
-		Tipo_productos p=new Tipo_productos(ref_tipo, nombre);
-		return p;
+		Colecciones c=new Colecciones(desc_coleccion, trimestre,exclusividad);
+		return c;
 	}
 	
-	private String parseTipoProductoString(Tipo_productos tipo_producto){
+	private String parseTipoProductoString(Colecciones c_colecciones){
 		StringBuilder registro = new StringBuilder(LONGITUD_REGISTRO);
-		registro.append(completarCampoConEspacios(tipo_producto.getReferencia_tipo(),REFERENCIA_TIPO_LONGITUD));
-		registro.append(completarCampoConEspacios(tipo_producto.getNombre(), NOMBRE_LONGITUD));
+		registro.append(completarCampoConEspacios(c_colecciones.getDesc_coleccion(),DESC_COLECCION_LONGITUD));
+		registro.append(completarCampoConEspacios(c_colecciones.getAno_trimestre(), ANO_TRIMESTRE_LONGITUD));
+                registro.append(completarCampoConEspacios(c_colecciones.getExclusividad(), EXCLUSIVIDAD_LONGITUD));
 			
 		return registro.toString();
 	}
@@ -158,6 +157,7 @@ public class FileTipo_productosDAO implements Tipo_productosDAO {
 		return String.format("%1$-" + tamanio + "s", campo);
 	}
 
+   
 
 }
 /**

@@ -12,6 +12,8 @@ package Controlador;
 
 
 import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.READ;
+import static java.nio.file.StandardOpenOption.WRITE;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -30,31 +32,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import Controlador.ProductosDAO;
-import Modelo.Productos;
+import Modelo.Almacenes;
+import Controlador.AlmacenesDAO;
 
-public class FileProductosDAO implements ProductosDAO {
+
+public class FileAlmacenesDAO implements AlmacenesDAO {
 
 	private static final String REGISTRO_ELIMINADO_TEXT = "||||||||||";
-	private static final String NOMBRE_ARCHIVO = "Productos";
+	private static final String NOMBRE_ARCHIVO = "Almacenes";
 	private static final Path file= Paths.get(NOMBRE_ARCHIVO);
-	private static final int LONGITUD_REGISTRO = 251;
-	private static final int ID_PRODUCTO_LONGITUD =40;
-	private static final int NOMBRES_LONGITUD = 40;
-        private static final int REFERENCIA_TIPO = 40;
-        private static final int DESC_COLECCION = 50;
-        private static final int IMAGE = 40;
-        private static final int PRECIO = 40;
-     
+	private static final int LONGITUD_REGISTRO = 96;
+	private static final int CODIGO_ALMACEN_LONGITUD = 20;
+	private static final int CIUDAD_LONGITUD = 25;
+        private static final int HORARIO_LONGITUD = 25;
+        private static final int DIRECCION_LONGITUD = 25;
+        
 	
 	
-	private static final Map<String, Productos> CACHE_PRODUCTOS = new HashMap<String, Productos>();
+	private static final Map<String, Almacenes> CACHE_ALMACENES = new HashMap<String, Almacenes>();
 	
 
 	@Override
-	public boolean saveProductos(Productos producto) {
+	public boolean saveAlmacenes(Almacenes almacen) {
 		
-		String registro=parseProductosString(producto);
+		String registro=parseAlmacenesString(almacen);
 
 		byte data[] = registro.getBytes();
 		ByteBuffer out = ByteBuffer.wrap(data);	
@@ -69,15 +70,15 @@ public class FileProductosDAO implements ProductosDAO {
 	
 	
 	@Override
-	public Productos getProductos(String id_producto) {
+	public Almacenes getAlmacenes(String c_almacen) {
 		//se busca el objeto en memoria cach�
-		Productos producto = CACHE_PRODUCTOS.get(id_producto);
+		Almacenes almacen = CACHE_ALMACENES.get(c_almacen);
 		
-		if(producto!=null){
-			System.out.println("ocurrió un hit en caché de productos");//contraejemplo, no hacer, no recomendable, usar Logger como log4J
-			return producto; //ocurri� un hit de cach�
+		if(almacen!=null){
+			System.out.println("ocurrió un hit en caché de almacens");//contraejemplo, no hacer, no recomendable, usar Logger como log4J
+			return almacen; //ocurri� un hit de cach�
 		}
-		System.out.println("ocurrió un miss en caché de productos");
+		System.out.println("ocurrió un miss en caché de almacens");
 		//ocurrió un miss de caché
 		try (SeekableByteChannel sbc = Files.newByteChannel(file)) {
 		    ByteBuffer buf = ByteBuffer.allocate(LONGITUD_REGISTRO);		    
@@ -86,11 +87,11 @@ public class FileProductosDAO implements ProductosDAO {
 		    while (sbc.read(buf) > 0) {
 		        buf.rewind();
 		        CharBuffer registro= Charset.forName(encoding).decode(buf);
-		        String identificacion = registro.subSequence(0, ID_PRODUCTO_LONGITUD).toString().trim();
-		        if(identificacion.equals(id_producto)){
-		        	producto = parseProducto(registro);
-		        	CACHE_PRODUCTOS.put(id_producto, producto);
-		        	return producto;
+		        String identificacion = registro.subSequence(0, CODIGO_ALMACEN_LONGITUD).toString().trim();
+		        if(identificacion.equals(c_almacen)){
+		        	almacen = parseAlmacen(registro);
+		        	CACHE_ALMACENES.put(c_almacen, almacen);
+		        	return almacen;
 		        }
 		        buf.flip();		        		        
 		    }
@@ -104,8 +105,8 @@ public class FileProductosDAO implements ProductosDAO {
 
 	
 	@Override
-	public List<Productos> getAllProductos() {	
-		List<Productos> productos = new ArrayList<Productos>();
+	public List<Almacenes> getAllAlmacenes() {	
+		List<Almacenes> almacens = new ArrayList<Almacenes>();
 		try (SeekableByteChannel sbc = Files.newByteChannel(file)) {
 		    ByteBuffer buf = ByteBuffer.allocate(LONGITUD_REGISTRO);  
 		    
@@ -113,55 +114,47 @@ public class FileProductosDAO implements ProductosDAO {
 		    String encoding = System.getProperty("file.encoding");
 		    while (sbc.read(buf) > 0) {
 		        buf.rewind();
-		        Productos producto = parseProducto(Charset.forName(encoding).decode(buf));
+		        Almacenes almacen = parseAlmacen(Charset.forName(encoding).decode(buf));
 		        buf.flip();
-		        productos.add(producto);		        
+		        almacens.add(almacen);		        
 		    }
 		} catch (IOException x) {
 		    System.out.println("caught exception: " + x);
 		}
-		return productos;
+		return almacens;
 	}
 		
 
 
 	
-	private Productos parseProducto(CharBuffer registro){		
-		String id_producto = registro.subSequence(0, ID_PRODUCTO_LONGITUD ).toString();
-		registro.position(ID_PRODUCTO_LONGITUD);
+	private Almacenes parseAlmacen(CharBuffer registro){		
+		String c_almacen = registro.subSequence(0, CODIGO_ALMACEN_LONGITUD ).toString();
+		registro.position(CODIGO_ALMACEN_LONGITUD);
 		registro=registro.slice();
 				
-		String nombres = registro.subSequence(0, NOMBRES_LONGITUD).toString();
-		registro.position(NOMBRES_LONGITUD);	
+		String ciudad = registro.subSequence(0, CIUDAD_LONGITUD).toString();
+		registro.position(CIUDAD_LONGITUD);	
 		registro=registro.slice();	
                 
-                String referencia_tipo = registro.subSequence(0, REFERENCIA_TIPO).toString();
-		registro.position(REFERENCIA_TIPO);	
+                String horario = registro.subSequence(0, HORARIO_LONGITUD).toString();
+		registro.position(HORARIO_LONGITUD);	
 		registro=registro.slice();
                 
-                String desc_coleccion = registro.subSequence(0, DESC_COLECCION).toString();
-		registro.position(DESC_COLECCION);	
-		registro=registro.slice();
-                
-                int precio = Integer.parseInt(registro.subSequence(0,PRECIO).toString());	
+                String direccion = registro.subSequence(0, DIRECCION_LONGITUD).toString();
+		registro.position(DIRECCION_LONGITUD);	
 		registro=registro.slice();
               
-		String image = registro.subSequence(0, IMAGE).toString();
-		registro.position(IMAGE);	
-		registro=registro.slice();
-               
-		Productos c = new Productos(id_producto, image ,precio, desc_coleccion, referencia_tipo);
+		Almacenes a = new Almacenes(c_almacen, ciudad, direccion, horario);
 		 
-                return c;
+                return a;
 	}
 	
-	private String parseProductosString(Productos producto){
+	private String parseAlmacenesString(Almacenes almacen){
 		StringBuilder registro = new StringBuilder(LONGITUD_REGISTRO);
-		registro.append(completarCampoConEspacios(producto.getId_productos(),ID_PRODUCTO_LONGITUD));
-		registro.append(completarCampoConEspacios(producto.getDesc_coleccion(),DESC_COLECCION));
-                registro.append(completarCampoConEspacios(producto.getReferencia_tipo(), REFERENCIA_TIPO));
-                registro.append(completarCampoConEspacios(producto.getImagen(), IMAGE));
-                registro.append(completarCampoConEspacios(Integer.toString(producto.getPrecio()), IMAGE));
+		registro.append(completarCampoConEspacios(almacen.getCodigo_almacen(),CODIGO_ALMACEN_LONGITUD));
+		registro.append(completarCampoConEspacios(almacen.getDireccion(),DIRECCION_LONGITUD));
+                registro.append(completarCampoConEspacios(almacen.getHorario(), HORARIO_LONGITUD));
+                registro.append(completarCampoConEspacios(almacen.getCiudad(), CIUDAD_LONGITUD));
                 
 		return registro.toString();
 	}
