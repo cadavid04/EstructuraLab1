@@ -29,25 +29,28 @@ import java.util.List;
 import java.util.Map;
 
 
-import Modelo.Colecciones;
+import Modelo.Tipo_productos;
 
 
-public class FileColeccionesDAO implements ColeccionesDAO {
+public class FileInventariosDAO implements InventariosDAO {
 
-	private static final String REGISTRO_ELIMINADO_TEXT = "||||||||||";
-	private static final String NOMBRE_ARCHIVO = "Colecciones";
+	
+	private static final String NOMBRE_ARCHIVO = "Tipo_productos";
 	private static final Path file= Paths.get(NOMBRE_ARCHIVO);
-	private static final int LONGITUD_REGISTRO = 60;
-	private static final int DESC_COLECCION_LONGITUD = 20;
-	private static final int ANO_TRIMESTRE_LONGITUD = 20;
-        private static final int EXCLUSIVIDAD_LONGITUD = 20;
-		
-	private static final Map<String, Colecciones> CACHE_TIPO_COLECCIONES = new HashMap<String, Colecciones>();
+	private static final int LONGITUD_REGISTRO = 40;
+	private static final int CANTIDAD_LONGITUD = 20;
+	private static final int ID_PRODUCTO_LONGITUD = 20;
+        private static final int CODIGO_ALMACEN_LONGITUD = 20;
+	
+	
+	
+	private static final Map<String, Tipo_productos> CACHE_TIPO_PRODUCTOS = new HashMap<String, Tipo_productos>();
+	
 
 	@Override
-	public boolean saveColecciones(Colecciones c_colecciones) {
+	public boolean saveTipo_productos(Tipo_productos t_productos) {
 		
-		String registro=parseTipoProductoString(c_colecciones);
+		String registro=parseTipoProductoString(t_productos);
 
 		byte data[] = registro.getBytes();
 		ByteBuffer out = ByteBuffer.wrap(data);	
@@ -60,10 +63,11 @@ public class FileColeccionesDAO implements ColeccionesDAO {
 		return false;
 	}
 	
+	
 	@Override
-	public Colecciones getColecciones(String ref_tipo) {
+	public Tipo_productos getTipo_productos(String ref_tipo) {
 		//se busca el objeto en memoria cach�
-		Colecciones tipo_productos = CACHE_TIPO_COLECCIONES.get(ref_tipo);
+		Tipo_productos tipo_productos = CACHE_TIPO_PRODUCTOS.get(ref_tipo);
 		
 		if(tipo_productos!=null){
 			System.out.println("ocurri� un hit en cach� de personas");//contraejemplo, no hacer, no recomendable, usar Logger como log4J
@@ -78,10 +82,10 @@ public class FileColeccionesDAO implements ColeccionesDAO {
 		    while (sbc.read(buf) > 0) {
 		        buf.rewind();
 		        CharBuffer registro= Charset.forName(encoding).decode(buf);
-		        String identificacion = registro.subSequence(0, DESC_COLECCION_LONGITUD).toString().trim();
+		        String identificacion = registro.subSequence(0, CANTIDAD_LONGITUD).toString().trim();
 		        if(identificacion.equals(ref_tipo)){
 		        	tipo_productos = parseTipoProductos(registro);
-		        	CACHE_TIPO_COLECCIONES.put(ref_tipo, tipo_productos);
+		        	CACHE_TIPO_PRODUCTOS.put(ref_tipo, tipo_productos);
 		        	return tipo_productos;
 		        }
 		        buf.flip();		        		        
@@ -92,9 +96,12 @@ public class FileColeccionesDAO implements ColeccionesDAO {
 		return null;		
 	}
 
+	
+
+	
 	@Override
-	public List<Colecciones> getAllColecciones() {	
-		List<Colecciones> productos= new ArrayList<Colecciones>();
+	public List<Tipo_productos> getAllTipo_producto() {	
+		List<Tipo_productos> productos= new ArrayList<Tipo_productos>();
 		try (SeekableByteChannel sbc = Files.newByteChannel(file)) {
 		    ByteBuffer buf = ByteBuffer.allocate(LONGITUD_REGISTRO);  
 		    
@@ -102,40 +109,38 @@ public class FileColeccionesDAO implements ColeccionesDAO {
 		    String encoding = System.getProperty("file.encoding");
 		    while (sbc.read(buf) > 0) {
 		        buf.rewind();
-		        Colecciones persona = parseTipoProductos(Charset.forName(encoding).decode(buf));
+		        Tipo_productos producto = parseTipoProductos(Charset.forName(encoding).decode(buf));
 		        buf.flip();
-		        productos.add(persona);		        
+		        productos.add(producto);		        
 		    }
 		} catch (IOException x) {
 		    System.out.println("caught exception: " + x);
 		}
 		return productos;
 	}
+		
 
-	private Colecciones parseTipoProductos(CharBuffer registro){		
-		String desc_coleccion = registro.subSequence(0, DESC_COLECCION_LONGITUD ).toString();
-		registro.position(DESC_COLECCION_LONGITUD);
+
+	
+	private Tipo_productos parseTipoProductos(CharBuffer registro){		
+		String ref_tipo = registro.subSequence(0, CANTIDAD_LONGITUD ).toString();
+		registro.position(CANTIDAD_LONGITUD);
 		registro=registro.slice();
 				
-		String trimestre = registro.subSequence(0, ANO_TRIMESTRE_LONGITUD).toString();
-		registro.position(ANO_TRIMESTRE_LONGITUD);	
-		registro=registro.slice();
-                
-                String exclusividad = registro.subSequence(0, EXCLUSIVIDAD_LONGITUD).toString();
-		registro.position(EXCLUSIVIDAD_LONGITUD);	
-		registro=registro.slice();
+		String nombre = registro.subSequence(0, IDPRODUCTO_LONGITUD).toString();
+		registro.position(IDPRODUCTO_LONGITUD);	
+		registro=registro.slice();		
 		
 				
 		
-		Colecciones c=new Colecciones(desc_coleccion, trimestre,exclusividad);
-		return c;
+		Tipo_productos p=new Tipo_productos(ref_tipo, nombre);
+		return p;
 	}
 	
-	private String parseTipoProductoString(Colecciones c_colecciones){
+	private String parseTipoProductoString(Tipo_productos tipo_producto){
 		StringBuilder registro = new StringBuilder(LONGITUD_REGISTRO);
-		registro.append(completarCampoConEspacios(c_colecciones.getDesc_coleccion(),DESC_COLECCION_LONGITUD));
-		registro.append(completarCampoConEspacios(c_colecciones.getAno_trimestre(), ANO_TRIMESTRE_LONGITUD));
-                registro.append(completarCampoConEspacios(c_colecciones.getExclusividad(), EXCLUSIVIDAD_LONGITUD));
+		registro.append(completarCampoConEspacios(tipo_producto.getReferencia_tipo(),CANTIDAD_LONGITUD));
+		registro.append(completarCampoConEspacios(tipo_producto.getNombre(), IDPRODUCTO_LONGITUD));
 			
 		return registro.toString();
 	}
@@ -154,7 +159,6 @@ public class FileColeccionesDAO implements ColeccionesDAO {
 		return String.format("%1$-" + tamanio + "s", campo);
 	}
 
-   
 
 }
 /**

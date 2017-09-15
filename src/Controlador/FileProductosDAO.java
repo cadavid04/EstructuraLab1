@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 
-import Controlador.ProductosDAO;
 import Modelo.Productos;
 
 public class FileProductosDAO implements ProductosDAO {
@@ -36,9 +35,8 @@ public class FileProductosDAO implements ProductosDAO {
 	private static final String REGISTRO_ELIMINADO_TEXT = "||||||||||";
 	private static final String NOMBRE_ARCHIVO = "Productos";
 	private static final Path file= Paths.get(NOMBRE_ARCHIVO);
-	private static final int LONGITUD_REGISTRO = 120;
+	private static final int LONGITUD_REGISTRO = 100;
 	private static final int ID_PRODUCTO_LONGITUD =20;
-	private static final int NOMBRES_LONGITUD = 20;
         private static final int REFERENCIA_TIPO = 20;
         private static final int DESC_COLECCION = 20;
         private static final int IMAGE = 20;
@@ -129,10 +127,6 @@ public class FileProductosDAO implements ProductosDAO {
 		registro.position(ID_PRODUCTO_LONGITUD);
 		registro=registro.slice();
 				
-		String nombres = registro.subSequence(0, NOMBRES_LONGITUD).toString();
-		registro.position(NOMBRES_LONGITUD);	
-		registro=registro.slice();	
-                
                 String referencia_tipo = registro.subSequence(0, REFERENCIA_TIPO).toString();
 		registro.position(REFERENCIA_TIPO);	
 		registro=registro.slice();
@@ -141,14 +135,16 @@ public class FileProductosDAO implements ProductosDAO {
 		registro.position(DESC_COLECCION);	
 		registro=registro.slice();
                 
-                int precio = Integer.parseInt(registro.subSequence(0,PRECIO).toString());	
+                int precio = Integer.parseInt(registro.subSequence(0,PRECIO).toString());
+                registro.position(PRECIO);
 		registro=registro.slice();
               
 		String image = registro.subSequence(0, IMAGE).toString();
 		registro.position(IMAGE);	
 		registro=registro.slice();
                
-		Productos c = new Productos(id_producto, image ,precio, desc_coleccion, referencia_tipo);
+		Productos c;
+            c = new Productos(id_producto, image ,precio, desc_coleccion, referencia_tipo);
 		 
                 return c;
 	}
@@ -159,7 +155,7 @@ public class FileProductosDAO implements ProductosDAO {
 		registro.append(completarCampoConEspacios(producto.getDesc_coleccion(),DESC_COLECCION));
                 registro.append(completarCampoConEspacios(producto.getReferencia_tipo(), REFERENCIA_TIPO));
                 registro.append(completarCampoConEspacios(producto.getImagen(), IMAGE));
-                registro.append(completarCampoConEspacios(Integer.toString(producto.getPrecio()), IMAGE));
+                registro.append(completarCampoConEspacios(Integer.toString(producto.getPrecio()), PRECIO));
                 
 		return registro.toString();
 	}

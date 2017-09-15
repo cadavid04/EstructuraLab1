@@ -13,7 +13,7 @@ import java.util.List;
 
 import Modelo.Tipo_productos;
 
-public interface InventariosDAO {
+public interface Tipo_productosDAO {
 	
 	public Tipo_productos getTipo_productos(String ref_tipo);
 	public boolean saveTipo_productos (Tipo_productos t_productos);

@@ -3,15 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/carloscarrascal/NetBeansProjects/CuerosDeAmerica/src/Vista/VistaProductos.java</file>
-            <file>file:/Users/carloscarrascal/NetBeansProjects/CuerosDeAmerica/src/Vista/VistaColecciones.java</file>
-            <file>file:/Users/carloscarrascal/NetBeansProjects/CuerosDeAmerica/src/Controlador/FileColeccionesDAO.java</file>
+            <file>file:/Users/carloscarrascal/NetBeansProjects/CuerosDeAmerica/src/Controlador/ProductosDAO.java</file>
+            <file>file:/Users/carloscarrascal/NetBeansProjects/CuerosDeAmerica/src/Vista/MenuPrincipal.java</file>
             <file>file:/Users/carloscarrascal/NetBeansProjects/CuerosDeAmerica/src/Controlador/FileProductosDAO.java</file>
-            <file>file:/Users/carloscarrascal/NetBeansProjects/CuerosDeAmerica/src/Modelo/Colecciones.java</file>
+            <file>file:/Users/carloscarrascal/NetBeansProjects/CuerosDeAmerica/src/Controlador/FileInventariosDAO.java</file>
             <file>file:/Users/carloscarrascal/NetBeansProjects/CuerosDeAmerica/src/Modelo/Inventario.java</file>
             <file>file:/Users/carloscarrascal/NetBeansProjects/CuerosDeAmerica/src/Modelo/Almacenes.java</file>
-            <file>file:/Users/carloscarrascal/NetBeansProjects/CuerosDeAmerica/src/Controlador/FileAlmacenesDAO.java</file>
-            <file>file:/Users/carloscarrascal/NetBeansProjects/CuerosDeAmerica/src/Vista/VistaAlmacen.java</file>
+            <file>file:/Users/carloscarrascal/NetBeansProjects/CuerosDeAmerica/src/Controlador/Tipo_productosDAO.java</file>
         </group>
     </open-files>
 </project-private>
